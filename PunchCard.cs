@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace WPFPunchCard
@@ -8,34 +12,35 @@ namespace WPFPunchCard
     {
         private const int NumberOfHours = 24;
 
+        private double _hourWidth;
+        private double _categoryHeight;
+        private double _countDiameterMultiplier;
+
         #region DPs
-        public int[][] Data
+
+        public List<List<int>> Data
         {
-            get { return (int[][])GetValue(DataProperty); }
+            get { return (List<List<int>>)GetValue(DataProperty); }
             set { SetValue(DataProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for Data.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DataProperty =
-            DependencyProperty.Register("Data", typeof(int[][]), typeof(PunchCard));
+            DependencyProperty.Register("MyProperty", typeof(List<List<int>>), typeof(PunchCard));
 
-        
-
-        public int NumberOfTiers
+        public int NumberOfCategories
         {
-            get { return (int)GetValue(NumberOfTiersProperty); }
-            set { SetValue(NumberOfTiersProperty, value); }
+            get { return (int)GetValue(NumberOfCategoriesProperty); }
+            set { SetValue(NumberOfCategoriesProperty, value); }
         }
-        public static readonly DependencyProperty NumberOfTiersProperty =
-            DependencyProperty.Register("NumberOfTiers", typeof(int), typeof(PunchCard), new UIPropertyMetadata(null));
+        public static readonly DependencyProperty NumberOfCategoriesProperty =
+            DependencyProperty.Register("NumberOfCategories", typeof(int), typeof(PunchCard), new UIPropertyMetadata(null));
 
-        public Pen TierLinePen
+        public Pen CategoryLinePen
         {
-            get { return (Pen)GetValue(TierLinePenProperty); }
-            set { SetValue(TierLinePenProperty, value); }
+            get { return (Pen)GetValue(CategoryLinePenProperty); }
+            set { SetValue(CategoryLinePenProperty, value); }
         }
-        public static readonly DependencyProperty TierLinePenProperty =
-            DependencyProperty.Register("TierLinePen", typeof(Pen), typeof(PunchCard), new PropertyMetadata(new Pen(Brushes.DarkGray, 0.5)));
+        public static readonly DependencyProperty CategoryLinePenProperty =
+            DependencyProperty.Register("CategoryLinePen", typeof(Pen), typeof(PunchCard), new PropertyMetadata(new Pen(Brushes.DarkGray, 0.5)));
 
         public Pen HourMarkerPen
         {
@@ -45,32 +50,76 @@ namespace WPFPunchCard
         public static readonly DependencyProperty HourMarkerPenProperty =
             DependencyProperty.Register("HourMarkerPen", typeof(Pen), typeof(PunchCard), new PropertyMetadata(new Pen(Brushes.LightGray, 0.5)));
 
+        
+
         #endregion
+
+        public PunchCard()
+        {
+            Data = new List<List<int>>
+            {
+                new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                new List<int> {1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1},
+                new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                new List<int> {1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 4, 1, 1, 1, 1, 1},
+                new List<int> {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+            };
+        }
 
         protected override void OnRender(DrawingContext dc)
         {
+            _hourWidth = ActualWidth / NumberOfHours;
+            _categoryHeight = ActualHeight / NumberOfCategories;
+
+            var maxCount = Data.Max((l => l.Max()));
+            _countDiameterMultiplier = (_categoryHeight - 20.0)/maxCount;
+
             DrawTiers(dc);
+            DrawPunches(dc);
             base.OnRender(dc);
         }
 
         private void DrawHourMarkers(DrawingContext dc, double yOffset)
         {
-            var hourWidth = ActualWidth / NumberOfHours;
             for (int i = 0; i < NumberOfHours; i++)
             {
-                var xPos = hourWidth*(i + 1) - hourWidth/2;
+                var xPos = _hourWidth * (i + 1) - _hourWidth / 2;
                 dc.DrawLine(HourMarkerPen, new Point(xPos, yOffset - 10), new Point(xPos, yOffset));
             }
         }
 
         private void DrawTiers(DrawingContext dc)
         {
-            var tierHeight = ActualHeight/NumberOfTiers;
-            for (int i = 0; i < NumberOfTiers; i++)
+            for (int i = 0; i < NumberOfCategories; i++)
             {
-                dc.DrawLine(TierLinePen, new Point(0.0, tierHeight * (i + 1)), new Point(ActualWidth, tierHeight * (i + 1)));
-                DrawHourMarkers(dc, tierHeight * (i + 1));
+                dc.DrawLine(CategoryLinePen, new Point(0.0, _categoryHeight * (i + 1)), new Point(ActualWidth, _categoryHeight * (i + 1)));
+                DrawHourMarkers(dc, _categoryHeight * (i + 1));
             }
+        }
+
+        private void DrawPunches(DrawingContext dc)
+        {
+            double yOffset;
+            for (int i = 0; i < NumberOfCategories; i++)
+            {
+                yOffset = _categoryHeight * (i + 1);
+
+                for (int j = 0; j < NumberOfHours; j++)
+                {
+                    var xPos = _hourWidth * (j + 1) - _hourWidth / 2;
+                    var punchPosition = new Point(xPos, yOffset - (_categoryHeight - 20.0)/2.0 - 10);
+                    var punchDiameter = CalculatePunchDiameter(Data[i][j]);
+                    dc.DrawEllipse(Brushes.Aqua, HourMarkerPen, punchPosition, punchDiameter / 2, punchDiameter / 2);
+                }
+            }
+        }
+
+
+        private double CalculatePunchDiameter(int count)
+        {
+            return count * _countDiameterMultiplier;
         }
     }
 }

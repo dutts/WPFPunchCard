@@ -4,6 +4,6 @@
         xmlns:wpfPunchCard="clr-namespace:WPFPunchCard"
         Title="MainWindow" Height="350" Width="525">
     <DockPanel>
-        <wpfPunchCard:PunchCard NumberOfTiers="7"/>
+        <wpfPunchCard:PunchCard NumberOfCategories="7"/>
     </DockPanel>
 </Window>
