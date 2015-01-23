@@ -1,0 +1,9 @@
+﻿<Window x:Class="WPFPunchCard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wpfPunchCard="clr-namespace:WPFPunchCard"
+        Title="MainWindow" Height="350" Width="525">
+    <DockPanel>
+        <wpfPunchCard:PunchCard NumberOfTiers="7"/>
+    </DockPanel>
+</Window>
