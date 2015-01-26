@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace WPFPunchCard
@@ -63,7 +62,7 @@ namespace WPFPunchCard
                 new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 new List<int> {1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 4, 1, 1, 1, 1, 1},
-                new List<int> {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                new List<int> {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                 new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
             };
         }
@@ -74,10 +73,12 @@ namespace WPFPunchCard
             _categoryHeight = ActualHeight / NumberOfCategories;
 
             var maxCount = Data.Max((l => l.Max()));
-            _countDiameterMultiplier = (_categoryHeight - 20.0)/maxCount;
+
+            _countDiameterMultiplier = Math.Min(_hourWidth / maxCount, _categoryHeight / maxCount);
 
             DrawTiers(dc);
             DrawPunches(dc);
+
             base.OnRender(dc);
         }
 
@@ -101,10 +102,9 @@ namespace WPFPunchCard
 
         private void DrawPunches(DrawingContext dc)
         {
-            double yOffset;
             for (int i = 0; i < NumberOfCategories; i++)
             {
-                yOffset = _categoryHeight * (i + 1);
+                double yOffset = _categoryHeight * (i + 1);
 
                 for (int j = 0; j < NumberOfHours; j++)
                 {
@@ -115,7 +115,6 @@ namespace WPFPunchCard
                 }
             }
         }
-
 
         private double CalculatePunchDiameter(int count)
         {
