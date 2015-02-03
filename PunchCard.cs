@@ -87,7 +87,7 @@ namespace WPFPunchCard
 
             DrawCategories(dc);
             DrawLabels(dc);
-            //DrawPunches(dc);
+            DrawPunches(dc);
 
             base.OnRender(dc);
         }
@@ -127,7 +127,7 @@ namespace WPFPunchCard
 
                 for (int j = 0; j < NumberOfHours; j++)
                 {
-                    var xPos = _hourWidth * (j + 1) - _hourWidth / 2;
+                    var xPos = _hourWidth * (j + 1) - _hourWidth / 2 + LabelMargin;
                     var punchPosition = new Point(xPos, yOffset - (_categoryHeight - 20.0)/2.0 - 10);
                     var punchDiameter = CalculatePunchDiameter(Data[i].Item2[j]);
                     dc.DrawEllipse(Brushes.Aqua, HourMarkerPen, punchPosition, punchDiameter / 2, punchDiameter / 2);
