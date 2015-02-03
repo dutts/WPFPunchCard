@@ -4,19 +4,6 @@
         xmlns:wpfPunchCard="clr-namespace:WPFPunchCard"
         Title="MainWindow" Height="350" Width="525" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}">
     <DockPanel>
-        <wpfPunchCard:PunchCardCanvas NumberOfCategories="7">
-            <ItemsControl ItemsSource="{Binding Data}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Ellipse Width="10" Height="10" Fill="Black"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            </wpfPunchCard:PunchCardCanvas>
+        <wpfPunchCard:PunchCard />
     </DockPanel>
 </Window>
