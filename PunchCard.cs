@@ -59,20 +59,6 @@ namespace WPFPunchCard
 
         #endregion
 
-        public PunchCard()
-        {
-            Data = new List<Tuple<string, List<int>>>
-            {
-                new Tuple<string, List<int>>("1", new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}),
-                new Tuple<string, List<int>>("2", new List<int> {1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1}),
-                new Tuple<string, List<int>>("3", new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}),
-                new Tuple<string, List<int>>("4", new List<int> {1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}),
-                new Tuple<string, List<int>>("5", new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 4, 1, 1, 1, 1, 1}),
-                new Tuple<string, List<int>>("6", new List<int> {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}),
-                new Tuple<string, List<int>>("7", new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1})
-            };
-        }
-
         protected override void OnRender(DrawingContext dc)
         {
             _punchCardRenderWidth = ActualWidth - LabelMargin;
@@ -94,6 +80,13 @@ namespace WPFPunchCard
 
         private void DrawLabels(DrawingContext dc)
         {
+            // Categories
+            for (int i = 0; i < Data.Count; i++)
+            {
+                var yPos = _categoryHeight*(i + 1) - _categoryHeight / 2;
+                dc.DrawText(new FormattedText(((Data[i].Item1)), CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 10.0, Brushes.Black), new Point(LabelMargin / 2, yPos));
+            }
+            // Hours
             for (int i = 0; i < NumberOfHours; i++)
             {
                 var xPos = _hourWidth * (i + 1) - _hourWidth / 2 + LabelMargin;

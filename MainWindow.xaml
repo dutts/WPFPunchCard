@@ -4,6 +4,6 @@
         xmlns:wpfPunchCard="clr-namespace:WPFPunchCard"
         Title="MainWindow" Height="350" Width="525" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}">
     <DockPanel>
-        <wpfPunchCard:PunchCard />
+        <wpfPunchCard:PunchCard Data="{Binding Data}" />
     </DockPanel>
 </Window>
