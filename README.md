@@ -28,3 +28,4 @@ Data = new List<Tuple<string, List<int>>>
     new Tuple<string, List<int>>("7", new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1})
 };
 ```
+The string is the category label.
