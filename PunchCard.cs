@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace WPFPunchCard
 {
@@ -17,7 +20,7 @@ namespace WPFPunchCard
         private double _hourWidth;
         private double _categoryHeight;
         private double _countDiameterMultiplier;
-
+        private readonly Canvas _toolTipLayer;
         private long _numberOfCategories;
 
         #region DPs
@@ -38,7 +41,6 @@ namespace WPFPunchCard
         public static readonly DependencyProperty LabelMarginProperty =
             DependencyProperty.Register("LabelMargin", typeof(double), typeof(PunchCard), new PropertyMetadata(30.0));
 
-       
         public Pen CategoryLinePen
         {
             get { return (Pen)GetValue(CategoryLinePenProperty); }
@@ -59,8 +61,21 @@ namespace WPFPunchCard
 
         #endregion
 
+        public PunchCard()
+        {
+            _toolTipLayer = new Canvas {Background = Brushes.Transparent};
+            Binding widthBinding = new Binding("ActualWidth") {RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof (PunchCard), 1)};
+            _toolTipLayer.SetBinding(WidthProperty, widthBinding);
+            Binding heightBinding = new Binding("ActualWidth") { RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(PunchCard), 1) };
+            _toolTipLayer.SetBinding(HeightProperty, heightBinding);
+
+            Children.Add(_toolTipLayer);
+        }
+
         protected override void OnRender(DrawingContext dc)
         {
+            _toolTipLayer.Children.Clear();
+
             _punchCardRenderWidth = ActualWidth - LabelMargin;
             _punchCardRenderHeight = ActualHeight - LabelMargin;
             _numberOfCategories = Data.Count;
@@ -123,7 +138,18 @@ namespace WPFPunchCard
                     var xPos = _hourWidth * (j + 1) - _hourWidth / 2 + LabelMargin;
                     var punchPosition = new Point(xPos, yOffset - (_categoryHeight - 20.0)/2.0 - 10);
                     var punchDiameter = CalculatePunchDiameter(Data[i].Item2[j]);
+                    
                     dc.DrawEllipse(Brushes.Aqua, HourMarkerPen, punchPosition, punchDiameter / 2, punchDiameter / 2);
+
+                    var toolTipArea = new Ellipse
+                    {
+                        Height = punchDiameter,
+                        Width = punchDiameter,
+                        Fill = Brushes.Transparent,
+                        ToolTip = Data[i].Item1 + " - " + Data[i].Item2[j],
+                        RenderTransform = new TranslateTransform(punchPosition.X - (punchDiameter / 2), punchPosition.Y - (punchDiameter / 2))
+                    };
+                    _toolTipLayer.Children.Add(toolTipArea);
                 }
             }
         }
