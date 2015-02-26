@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -39,7 +38,7 @@ namespace WPFPunchCard
             set { SetValue(LabelMarginProperty, value); }
         }
         public static readonly DependencyProperty LabelMarginProperty =
-            DependencyProperty.Register("LabelMargin", typeof(double), typeof(PunchCard), new PropertyMetadata(30.0));
+            DependencyProperty.Register("LabelMargin", typeof(double), typeof(PunchCard), new FrameworkPropertyMetadata(30.0) { AffectsRender = true });
 
         public Pen CategoryLinePen
         {
@@ -47,7 +46,7 @@ namespace WPFPunchCard
             set { SetValue(CategoryLinePenProperty, value); }
         }
         public static readonly DependencyProperty CategoryLinePenProperty =
-            DependencyProperty.Register("CategoryLinePen", typeof(Pen), typeof(PunchCard), new PropertyMetadata(new Pen(Brushes.DarkGray, 0.5)));
+            DependencyProperty.Register("CategoryLinePen", typeof(Pen), typeof(PunchCard), new FrameworkPropertyMetadata(new Pen(Brushes.DarkGray, 0.5)) { AffectsRender = true });
 
         public Pen HourMarkerPen
         {
@@ -55,7 +54,7 @@ namespace WPFPunchCard
             set { SetValue(HourMarkerPenProperty, value); }
         }
         public static readonly DependencyProperty HourMarkerPenProperty =
-            DependencyProperty.Register("HourMarkerPen", typeof(Pen), typeof(PunchCard), new PropertyMetadata(new Pen(Brushes.LightGray, 0.5)));
+            DependencyProperty.Register("HourMarkerPen", typeof(Pen), typeof(PunchCard), new FrameworkPropertyMetadata(new Pen(Brushes.LightGray, 0.5)) { AffectsRender = true });
 
         public bool ToolTips
         {
