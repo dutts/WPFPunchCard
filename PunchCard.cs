@@ -57,7 +57,13 @@ namespace WPFPunchCard
         public static readonly DependencyProperty HourMarkerPenProperty =
             DependencyProperty.Register("HourMarkerPen", typeof(Pen), typeof(PunchCard), new PropertyMetadata(new Pen(Brushes.LightGray, 0.5)));
 
-        
+        public bool ToolTips
+        {
+            get { return (bool)GetValue(ToolTipsProperty); }
+            set { SetValue(ToolTipsProperty, value); }
+        }
+        public static readonly DependencyProperty ToolTipsProperty =
+            DependencyProperty.Register("ToolTips", typeof(bool), typeof(PunchCard), new FrameworkPropertyMetadata(true) { AffectsRender = true });
 
         #endregion
 
@@ -141,15 +147,20 @@ namespace WPFPunchCard
                     
                     dc.DrawEllipse(Brushes.Aqua, HourMarkerPen, punchPosition, punchDiameter / 2, punchDiameter / 2);
 
-                    var toolTipArea = new Ellipse
+                    if (ToolTips)
                     {
-                        Height = punchDiameter,
-                        Width = punchDiameter,
-                        Fill = Brushes.Transparent,
-                        ToolTip = Data[i].Item1 + " - " + Data[i].Item2[j],
-                        RenderTransform = new TranslateTransform(punchPosition.X - (punchDiameter / 2), punchPosition.Y - (punchDiameter / 2))
-                    };
-                    _toolTipLayer.Children.Add(toolTipArea);
+                        var toolTipArea = new Ellipse
+                        {
+                            Height = punchDiameter,
+                            Width = punchDiameter,
+                            Fill = Brushes.Transparent,
+                            ToolTip = Data[i].Item1 + " - " + Data[i].Item2[j],
+                            RenderTransform =
+                                new TranslateTransform(punchPosition.X - (punchDiameter/2),
+                                    punchPosition.Y - (punchDiameter/2))
+                        };
+                        _toolTipLayer.Children.Add(toolTipArea);
+                    }
                 }
             }
         }

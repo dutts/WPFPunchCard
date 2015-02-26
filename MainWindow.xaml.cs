@@ -32,5 +32,14 @@ namespace WPFPunchCard
         }
         public static readonly DependencyProperty DataProperty =
             DependencyProperty.Register("Data", typeof(List<Tuple<string, List<int>>>), typeof(MainWindow));
+
+        public bool ToolTips
+        {
+            get { return (bool)GetValue(ToolTipsProperty); }
+            set { SetValue(ToolTipsProperty, value); }
+        }
+        public static readonly DependencyProperty ToolTipsProperty =
+            DependencyProperty.Register("ToolTips", typeof(bool), typeof(MainWindow));
+
     }
 }

@@ -3,7 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:wpfPunchCard="clr-namespace:WPFPunchCard"
         Title="WPFPunchCard Demo" Height="350" Width="525" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}">
-    <DockPanel>
-        <wpfPunchCard:PunchCard Data="{Binding Data}" />
+    <DockPanel LastChildFill="True">
+        <Expander Header="Configuration" DockPanel.Dock="Top">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Label Content="ToolTips :"/>
+                <CheckBox IsChecked="{Binding ToolTips}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Expander>
+        <wpfPunchCard:PunchCard Data="{Binding Data}" ToolTips="{Binding ToolTips}"/>
     </DockPanel>
 </Window>
