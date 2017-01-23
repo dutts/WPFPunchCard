@@ -56,6 +56,7 @@
     </ApplicationDefinition>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="PunchCard.cs" />
+    <Compile Include="PunchCardData.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

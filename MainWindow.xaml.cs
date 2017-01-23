@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace WPFPunchCard
 {
@@ -23,8 +25,22 @@ namespace WPFPunchCard
                 new Tuple<string, List<int>>("6", new List<int> {1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}),
                 new Tuple<string, List<int>>("7", new List<int> {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1})
             };
+
+            TestData = new PunchCardData(new List<string>{"1","2","3","4","5","6","7"});
+            TestData[0]. = new ObservableCollection<int>() { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
         }
 
+        public PunchCardData TestData
+        {
+            get { return (PunchCardData)GetValue(TestDataProperty); }
+            set { SetValue(TestDataProperty, value); }
+        }
+
+        public static readonly DependencyProperty TestDataProperty =
+            DependencyProperty.Register("TestData", typeof(PunchCardData), typeof(MainWindow));
+
+        
         public List<Tuple<string, List<int>>> Data
         {
             get { return (List<Tuple<string, List<int>>>)GetValue(DataProperty); }
